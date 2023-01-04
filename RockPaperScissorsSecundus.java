@@ -15,9 +15,9 @@ public class RockPaperScissorsSecundus {
         outcomeAndScore.put("X", 0);
         outcomeAndScore.put("Y", 3);
         outcomeAndScore.put("Z", 6);
-        letterToPlayVal.put("X", 0);
-        letterToPlayVal.put("Y", 1);
-        letterToPlayVal.put("Z", 2);
+//        letterToPlayVal.put("X", 0);
+//        letterToPlayVal.put("Y", 1);
+//        letterToPlayVal.put("Z", 2);
         letterToPlayVal.put("A", 0);
         letterToPlayVal.put("B", 1);
         letterToPlayVal.put("C", 2);
@@ -50,18 +50,18 @@ public class RockPaperScissorsSecundus {
 
     public static int getMatchScore(String[] plays){
         int opponent = letterToPlayVal.get(plays[0]);
-        int self = letterToPlayVal.get(plays[1]);
-        if (opponent % 3 == ((self + 1) % 3)) {
+        String outcome = plays[1];
+        if (outcome.equals("X")) {
             //loss
-            return 0;
+            return ((opponent + 2) % 3) + 1;
         }
-        if (opponent == self) {
+        if (outcome.equals("Y")) {
             //tie
-            return 3;
+            return opponent + 1;
         }
-        if ((opponent + 1) % 3 == (self % 3)) {
+        if (outcome.equals("Z")) {
             //win
-            return 6;
+            return ((opponent + 1) % 3) + 1;
         }
         return -1; //error!
     }
