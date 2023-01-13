@@ -11,7 +11,17 @@ import java.util.regex.Pattern;
 
 public class RopeBridge {
     static int[] head = new int[]{0, 0}; //row, col
-    static int[] tail = new int[]{0, 0};
+    static int[][] tail = new int[][]{
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0}
+    };
     static Set<String> locs = new HashSet<>();
 
     public static void main(String[] args) {
@@ -59,17 +69,44 @@ public class RopeBridge {
             }
             //System.out.println(Arrays.toString(head));
             if(tailOutOfRange()){
-                tail[0] = oldHeadLoc[0];
-                tail[1] = oldHeadLoc[1];
-
+                tail[0][0] = oldHeadLoc[0];
+                tail[0][1] = oldHeadLoc[1];
             }
-            locs.add("" + tail[0] + "," + tail[1]);
+            //System.out.println("t:" + Arrays.toString(transform));
+
+            upDateTail();
+            locs.add("" + tail[8][0] + "," + tail[8][1]);
             //System.out.println("locs: " + locs);
         }
     }
 
     public static boolean tailOutOfRange(){
-        return abs(head[0] - tail[0]) > 1 || abs(head[1] - tail[1]) > 1;
+        return abs(head[0] - tail[0][0]) > 1 || abs(head[1] - tail[0][1]) > 1;
+    }
+
+    public static boolean outOfRange(int[] t1, int[]t2){
+        return abs(t1[0] - t2[0]) > 1 || abs(t1[1] - t2[1]) > 1;
+    }
+
+    public static void upDateTail(){
+        for (int j = 0; j < tail.length-1; j++) {
+            if (outOfRange(tail[j], tail[j+1])){
+                catchUp(tail[j], tail[j+1]);
+            }
+        }
+    }
+
+    public static void catchUp(int[] first, int[] second){
+        if (first[0] > second[0]){
+            second[0]++;
+        } else if (first[0] < second[0]){
+            second[0]--;
+        }
+        if (first[1] > second[1]){
+            second[1]++;
+        } else if (first[1] < second[1]){
+            second[1]--;
+        }
     }
 
     public static int abs(int a){
