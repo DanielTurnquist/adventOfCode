@@ -3,8 +3,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Stack;
-
 class monkey{
     String operator;
     String arg2;
@@ -25,31 +23,25 @@ class monkey{
     }
     public void processItem(Integer item){
         inspections++;
-        int arg;
-        int thrown;
-        boolean oldFlag = false;
+        long arg;
+        long thrown;
         if (this.arg2.equals("old")){
-            arg = item;
-            oldFlag = true;
+            arg = (long) item;
         } else {
             arg = Integer.parseInt(this.arg2);
         }
-        if (!oldFlag) {
-            if (operator.equals("*")) {
-                thrown = item * arg;
-            } else {
-                thrown = item + arg;
-            }
+        
+        if (operator.equals("*")) {
+            thrown = (long) ((long) item * (long) arg);
         } else {
-            thrown = item;
+            thrown = item + arg;
         }
-        if (thrown % MonkeyInTheMiddle.divisor == 0){
-            thrown %= MonkeyInTheMiddle.divisor;
-        }
+        //thrown = Math.floorDiv(thrown, 3);
+        thrown %= MonkeyInTheMiddle.divisor;
         if (thrown % testDivisor == 0){
-            MonkeyInTheMiddle.monkeys[trueMonkey].items.add(thrown);
+            MonkeyInTheMiddle.monkeys[trueMonkey].items.add((int) thrown);
         } else {
-            MonkeyInTheMiddle.monkeys[falseMonkey].items.add(thrown);
+            MonkeyInTheMiddle.monkeys[falseMonkey].items.add((int) thrown);
         }
     }
 }
@@ -62,8 +54,8 @@ public class MonkeyInTheMiddle {
         String[] monkeyStrings;
 
         try {
-            //File inputFile = new File("input.txt");
-            File inputFile = new File("test.txt");
+            File inputFile = new File("input.txt");
+            //File inputFile = new File("test.txt");
             Scanner myReader = new Scanner(inputFile);
             while (myReader.hasNextLine()) {
                 inputString += (myReader.nextLine()) + '\n';
@@ -112,7 +104,7 @@ public class MonkeyInTheMiddle {
         str = str.replaceAll(" +", " ").trim();
         String[] strArr = str.split(" ");
         List<Integer> toReturn = new ArrayList<>();
-        for (int i = strArr.length - 1; i >= 0; i--) {
+        for (int i = 0; i <  strArr.length; i++) {
             toReturn.add(Integer.parseInt(strArr[i]));
         }
         return toReturn;
