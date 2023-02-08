@@ -13,52 +13,85 @@ let num = "";
 stringPairs.forEach(pair => {
     structures.push(pairToStructure(pair));
 });
+let d1 = [[2]];
+let d2 = [[6]]
+structures.push(d1);
+structures.push(d2);//divider packets
+let structs: any[] = [];
 let result = 0; //-1: wrong order 0: same 1: right
-let total = 0;
+let key = 1;
 for (let i = 0; i < structures.length; i++) {
-    result = 0;
-    compare(structures[i][0], structures[i][1]);
-    if (result === 1) {
-        console.log(i+1);
-        total += i + 1;
-    }
+    structs.push(structures[i][0]);
+    structs.push(structures[i][1]);
 }
-console.log(total);
-
+// console.log(total);
+let sorted:any[][] = structs.sort((l: any, r: any) => {
+    if (compare(l, r)) {
+        return -1;
+    }
+    return 1;
+})
+// for (let i = 0; i < sorted.length; i++) {
+//     if (sorted[i] == d1 || sorted[i] == d2) {
+//         key *= (i + 1);
+//     };
+// }
+console.log(key);
             //utilities//
-
-function compare(left: any[], right: any[]){
+function compare(left: any[], right: any[]): boolean{
+    result = 0;
+    recCompare(left, right);
+    if (result === 1) {
+        return true;
+    }
+    return false;
+}
+function recCompare(left: any[], right: any[]){
     if (result !== 0) {
         return;
     }
+    //console.log("Compare " + left + " vs " + right);
     for (let i = 0; i < Math.min(left.length, right.length); i++) {
         let leftEle = left[i];
         let rightEle = right[i];
+        //console.log("Compare " + leftEle + " vs " + rightEle);
         if (Number.isInteger(leftEle) && Number.isInteger(rightEle)) {//both are nums
             if (leftEle < rightEle) {
+                //console.log("Left side is smaller, so inputs are in the right order");
                 result = 1;
                 return;
             }
             else if (leftEle > rightEle){
+                //console.log("Right side is smaller, so inputs are NOT in the right order");
                 result = -1;
                 return;
             }
         }
         else if (!Number.isInteger(leftEle) && !Number.isInteger(rightEle)){//both are lists
-            compare(leftEle, rightEle);
+            recCompare(leftEle, rightEle);
         }
         else if (Number.isInteger(leftEle) && !Number.isInteger(rightEle)){//left is a num, right is a list
-            compare([leftEle], rightEle);
+            recCompare([leftEle], rightEle);
         }
         else if (!Number.isInteger(leftEle) && Number.isInteger(rightEle)){//left is a list, right is a num
-            compare(leftEle, [rightEle]);
+            recCompare(leftEle, [rightEle]);
         }
+        if (result !== 0){
+            break;
+        }
+    }
+    if (result !== 0){
+        return;
     }
     if (left.length > right.length){
         result = -1;
+        //console.log("Right side ran out of items, so inputs are NOT in the right order");
+        return;
     }
     if (left.length < right.length){
+        //console.log("Left side ran out of items, so inputs are in the right order");
         result = 1;
+        return;
     }
 }
 
