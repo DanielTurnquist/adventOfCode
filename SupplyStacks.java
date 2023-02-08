@@ -1,9 +1,11 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,11 +31,13 @@ public class SupplyStacks {
             stacks.add(new Stack<Character>());
         }
         setupStacks();
-        //System.out.println(stacks.get(4));
         for (String line : inputLines) {
-            executeInstruction(extractNumsFromLine(line));
+            executeInstruction2(extractNumsFromLine(line));
+            System.out.println(line);
+            printStacks();
+            System.out.println("----------------------");
         }
-        System.out.println(stacks.get(2));
+        
     }   
     public static List<Integer> extractNumsFromLine(String line){
         //System.out.println(line);
@@ -52,7 +56,7 @@ public class SupplyStacks {
             "JZGVTDBN",
             "FPWDMRS",
             "ZSRCV",
-            "GHPZHTR",
+            "GHPZJTR",
             "FQZDNJCT",
             "MFSGWPVN",
             "QPBVCG",
@@ -61,7 +65,7 @@ public class SupplyStacks {
         };
         for (int i = 0; i < stackStrings.length; i++) {
             for (int j = 0; j < stackStrings[i].length(); j++) {
-                stacks.get(i).add(stackStrings[i].charAt(j));
+                stacks.get(i).add(stackStrings[i].charAt(stackStrings[i].length() - 1 - j));
             }
         }
     }
@@ -70,4 +74,19 @@ public class SupplyStacks {
             stacks.get(nums.get(2) - 1).add(stacks.get(nums.get(1) - 1).pop());
         }
     }
+    public static void executeInstruction2(List<Integer> nums){
+        Stack<Character> grabbed = new Stack<Character>();        
+        for (int i = 0; i < nums.get(0); i++) {
+            grabbed.add(stacks.get(nums.get(1)- 1).pop());
+        }
+        while(grabbed.size() > 0){
+            stacks.get(nums.get(2) - 1).add(grabbed.pop());
+        }
+
+    }
+    static void printStacks(){
+        for (int i = 0; i < stacks.size(); i++) {
+            System.out.println(i+1 + " " + stacks.get(i));
+        }
+    } 
 }
